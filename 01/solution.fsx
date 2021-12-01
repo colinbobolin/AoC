@@ -1,4 +1,4 @@
-let data = System.IO.File.ReadAllLines "data/data.txt" 
+let data = System.IO.File.ReadAllLines "./data/data.txt" 
 
 data
 |> Array.map int
