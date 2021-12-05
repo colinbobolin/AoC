@@ -71,7 +71,6 @@ module Board =
         boardChecks |> horizontalWin
         || boardChecks |> verticalWin
 
-
 let rec continueGame (queue: int []) (boards: Board []) =
     match boards with
     | [||] -> ()
