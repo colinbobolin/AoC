@@ -40,13 +40,13 @@ module Board =
 
     let markNum (num: int) (Board board) =
         board
-        |> Array.map (fun row ->
-            row
-            |> Array.map (fun (thisNum, marked) ->
+        |> Array.map (
+            Array.map (fun (thisNum, marked) ->
                 if thisNum = num then
                     (thisNum, true) // mark true
                 else
-                    (thisNum, marked)))
+                    (thisNum, marked))
+        )
         |> Board
 
     let calculateScore (num: int) (Board board) =
@@ -78,14 +78,15 @@ let rec continueGame (queue: int []) (boards: Board []) =
         let num, newQueue = Queue.pop queue
         let newBoards = boards |> Array.map (Board.markNum num)
 
-        newBoards
-        |> Array.map (fun board ->
-            let win = Board.checkWin board
-
-            if win then
+        let checkWinAndPrint board =
+            match Board.checkWin board with
+            | true ->
                 Board.calculateScore num board |> printfn "%i"
+                board, true
+            | false -> board, false
 
-            board, win)
+        newBoards
+        |> Array.map checkWinAndPrint
         |> Array.filter (fun (_, win) -> not win)
         |> Array.map fst
         |> continueGame newQueue
